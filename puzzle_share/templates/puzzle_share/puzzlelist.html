@@ -1,0 +1,23 @@
+<h2> Welcome to Puzzle Share</h2>
+
+<form method="POST" action="{% url 'puzzle_list' %}">
+    {% csrf_token %}
+    {{ new_puzzle_form }}
+    <button type="submit">Add New Puzzle</button>
+</form>
+
+<h3> Currently Available Puzzles</h3>
+{% for puzzle in puzzles %}
+
+<div>
+    {{ puzzle }}
+    
+</div>
+
+{% empty %}
+
+<P> You have no puzzles on your list</P>
+
+{% endfor %}
+<P></P>
+<a href="{% url 'puzzles_checked_out' %}"> Puzzles currently checked out</a>

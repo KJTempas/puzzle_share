@@ -1,0 +1,18 @@
+<h1>Puzzles Currently Checked Out</h1>
+
+{% if status %}
+
+<ul>
+    {% for puzzle in status %}
+    <li>{{ puzzle }} </li>
+    {% endfor %}
+
+</ul>
+
+{% else %}
+
+<p> There are no puzzles currently checked out</p>
+
+{% endif %}
+
+<a href="{% url 'puzzle_list' %}">Puzzles Available</a>
