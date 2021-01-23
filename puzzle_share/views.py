@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import Puzzle
 from .forms import NewPuzzleForm
 
@@ -27,7 +27,25 @@ def puzzle_list(request):
     return render(request, 'puzzle_share/puzzlelist.html', { 'puzzles': puzzles, 'new_puzzle_form': new_puzzle_form })
 
 
-def puzzles_checked_out(request):
+def puzzles_checked_out(request): #list of currently checked outpuzzles
     status = Puzzle.objects.filter(status = 2)
     return render(request, 'puzzle_share/checked_out.html', { 'status': status})
     
+
+def puzzle_was_checked_out(request, puzzle_pk): #change from available to checked out
+    if request.method == 'POST':
+        #puzzle = Puzzle.objects.get(pk=puzzle_pk)
+        puzzle = get_object_or_404(Puzzle, pk=place_pk) #newer version w 404
+        puzzle.status = 2 #2 means checked out; 1 is available
+        puzzle.save()
+    
+    return redirect('puzzle_list')
+
+def puzzle_returned(request, puzzle_pk):
+    if request.method =='POST':
+        #puzzle = Puzzle.objects.get(pk=puzzle_pk)
+        puzzle = get_object_or_404(Puzzle, pk=puzzle_pk)
+        puzzle.status = 1
+        puzzle.save()
+    
+    return redirect('puzzle_list')

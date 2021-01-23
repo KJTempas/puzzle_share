@@ -11,7 +11,11 @@
 
 <div>
     {{ puzzle }}
-    
+    <form method="POST" action="{% url 'puzzle_was_checked_out' puzzle.pk %}">
+        {% csrf_token %}
+        <button type="submit">Check Out</button>
+    </form>
+
 </div>
 
 {% empty %}

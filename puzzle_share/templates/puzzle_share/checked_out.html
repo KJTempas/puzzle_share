@@ -5,6 +5,10 @@
 <ul>
     {% for puzzle in status %}
     <li>{{ puzzle }} </li>
+    <form method="POST" action="{% url 'puzzle_returned' puzzle.pk %}">
+        {% csrf_token %}
+        <button type="submit">Returned</button>
+    </form>
     {% endfor %}
 
 </ul>
