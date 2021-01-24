@@ -1,0 +1,28 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <title> Puzzle Share</title>
+        <link rel="stylesheet" href="https://unpkg.com/sakura.css/css/sakura.css" type="text/css">
+        <link rel="stylesheet" href="{% static 'css/style.css' %}" type="text/css">
+    </head>
+
+    <body>
+        <h1> Welcome to Puzzle Share</h1>
+<hr>
+        {% block content %}
+        {% endblock %}
+
+        <hr>
+
+    <div>
+        <p>A puzzle sharing site build with Django</p>
+
+        <a class = "nav-link" href="{% url 'puzzle_list' %}">Puzzles Available</a>
+        <a class = "nav-link" href="{% url 'puzzles_checked_out' %}">Puzzles Checked Out</a>
+    </div>
+    </body>
+
+
+
+</html>

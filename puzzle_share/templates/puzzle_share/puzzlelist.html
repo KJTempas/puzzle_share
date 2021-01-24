@@ -1,17 +1,21 @@
-<h2> Welcome to Puzzle Share</h2>
+{% extends 'puzzle_share/base.html' %}
+{% block content %}
+
+<h2> Add New Puzzles Here</h2>
 
 <form method="POST" action="{% url 'puzzle_list' %}">
     {% csrf_token %}
     {{ new_puzzle_form }}
-    <button type="submit">Add New Puzzle</button>
+    <button id="add-new-puzzle" type="submit">Add New Puzzle</button>
 </form>
 
-<h3> Currently Available Puzzles</h3>
+<h3> Puzzles Currently Available</h3>
+
 {% for puzzle in puzzles %}
 
-<div>
-    {{ puzzle }}
-    <form method="POST" action="{% url 'puzzle_was_checked_out' puzzle.pk %}">
+<div class="puzzlelist-puzzle">
+   <span class = "puzzle-details"> {{ puzzle }}</span>
+    <form class="checked-out-form" method="POST" action="{% url 'puzzle_was_checked_out' puzzle.pk %}">
         {% csrf_token %}
         <button type="submit">Check Out</button>
     </form>
@@ -25,3 +29,5 @@
 {% endfor %}
 <P></P>
 <a href="{% url 'puzzles_checked_out' %}"> Puzzles currently checked out</a>
+
+{% endblock %}

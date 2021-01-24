@@ -1,17 +1,23 @@
+{% extends 'puzzle_share/base.html' %}
+{% block content %}
+
 <h1>Puzzles Currently Checked Out</h1>
 
 {% if status %}
 
-<ul>
     {% for puzzle in status %}
-    <li>{{ puzzle }} </li>
-    <form method="POST" action="{% url 'puzzle_returned' puzzle.pk %}">
+    <div class="puzzlelist-puzzle">
+    <span class = "puzzle-details"> {{ puzzle }}</span>
+   
+    <form class="checked-out-form" method="POST" action="{% url 'puzzle_returned' puzzle.pk %}">
         {% csrf_token %}
         <button type="submit">Returned</button>
     </form>
+ 
+ </div>
     {% endfor %}
 
-</ul>
+
 
 {% else %}
 
@@ -20,3 +26,5 @@
 {% endif %}
 
 <a href="{% url 'puzzle_list' %}">Puzzles Available</a>
+
+{% endblock %}

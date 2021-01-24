@@ -1,0 +1,22 @@
+span.puzzle-details {
+    display: inline-block;
+    width: 70%
+}
+form.checked-out-form {
+    display: inline;
+}
+
+div.puzzlelist-puzzle {
+    margin: 20px;
+}
+label {
+    display: inline-block;
+    padding-right: 8px;
+}
+a.nav-link  {
+    padding-right: 40 px
+}
+#add-new-puzzle {
+    background-color: blue;
+    border: darkblue;
+}

@@ -28,14 +28,13 @@ def puzzle_list(request):
 
 
 def puzzles_checked_out(request): #list of currently checked outpuzzles
-    status = Puzzle.objects.filter(status = 2)
+    status = Puzzle.objects.filter(status = 2).order_by('name')
     return render(request, 'puzzle_share/checked_out.html', { 'status': status})
     
 
 def puzzle_was_checked_out(request, puzzle_pk): #change from available to checked out
     if request.method == 'POST':
-        #puzzle = Puzzle.objects.get(pk=puzzle_pk)
-        puzzle = get_object_or_404(Puzzle, pk=place_pk) #newer version w 404
+        puzzle = get_object_or_404(Puzzle, pk=puzzle_pk) 
         puzzle.status = 2 #2 means checked out; 1 is available
         puzzle.save()
     
@@ -43,8 +42,7 @@ def puzzle_was_checked_out(request, puzzle_pk): #change from available to checke
 
 def puzzle_returned(request, puzzle_pk):
     if request.method =='POST':
-        #puzzle = Puzzle.objects.get(pk=puzzle_pk)
-        puzzle = get_object_or_404(Puzzle, pk=puzzle_pk)
+        puzzle = Puzzle.objects.get(pk=puzzle_pk)
         puzzle.status = 1
         puzzle.save()
     
