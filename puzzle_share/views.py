@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Puzzle
 from .forms import NewPuzzleForm, SearchForm
+from django.contrib import messages
 
 # Create your views here.
 
@@ -19,12 +20,13 @@ def add_puzzle(request):
         puzzle = form.save()#create a new Puzzle from the form
         if form.is_valid(): #check against DB constraints
             puzzle.save() #save Puzzle to the dbase
+            
             return redirect('puzzle_list') #redirects to GET view w puzzle list (same view)
-
+       
 #If not a POST, or form is not valid, render the page with empty form
     puzzles = Puzzle.objects.order_by('name')
     new_puzzle_form = NewPuzzleForm()
-    return render(request, 'puzzle_share/puzzlelist.html', { 'puzzles': puzzles, 'new_puzzle_form': new_puzzle_form })
+    return render(request, 'puzzle_share/add.html', { 'puzzles': puzzles, 'new_puzzle_form': new_puzzle_form })
 
 def puzzle_list(request):
     search_form = SearchForm(request.GET)

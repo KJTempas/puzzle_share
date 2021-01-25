@@ -1,0 +1,15 @@
+{% extends 'puzzle_share/base.html' %}
+{% block content %}
+
+<h3> Add New Puzzles</h3>
+
+<form method="POST" action="{% url 'add_puzzle' %}">
+    {% csrf_token %}
+    {{ new_puzzle_form }}
+    <button id="add-new-puzzle" type="submit">Add New Puzzle</button>
+</form>
+
+
+
+
+{% endblock %}

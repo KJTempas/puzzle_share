@@ -14,7 +14,8 @@ label {
     padding-right: 8px;
 }
 a.nav-link  {
-    padding-right: 40 px
+    padding-right: 40 px;
+    
 }
 #add-new-puzzle {
     background-color: blue;
@@ -24,7 +25,7 @@ a.nav-link  {
 #site-header {
     
     color: blue;
-    padding: 40px 00 40px 0 px;
+    padding: 40px 0 40px 0 px;
     text-align: center;
 }
 .check-out{

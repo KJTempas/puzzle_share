@@ -1,16 +1,10 @@
 {% extends 'puzzle_share/base.html' %}
 {% block content %}
 
-<a href="{% url 'puzzles_available' %}">Available Puzzles</a>
-<a href="{% url 'puzzles_checked_out' %}"> Puzzles Currently Checked Out</a>
+<a class = "nav-link" href="{% url 'puzzles_available' %}">Puzzles Available</a>
+<a class = "nav-link" href="{% url 'puzzles_checked_out' %}"> Puzzles Currently Checked Out</a>
+<a class = "nav-link" href="{% url 'add_puzzle' %}">Add a Puzzle</a>
 <hr>
-
-<h3> Add New Puzzles Here</h3>
-<form method="POST" action="{% url 'add_puzzle' %}">
-    {% csrf_token %}
-    {{ new_puzzle_form }}
-    <button id="add-new-puzzle" type="submit">Add New Puzzle</button>
-</form>
 
 
 <h4>Search</h4>
@@ -27,12 +21,11 @@
 <div class="puzzlelist-puzzle">
    <span class = "puzzle-details"> {{ puzzle }}</span>
     
-
 </div>
 
 {% empty %}
 
-<P> You have no puzzles on your list</P>
+<P> No puzzles match search term</P>
 
 {% endfor %}
 
