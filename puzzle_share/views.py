@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Puzzle
-from .forms import NewPuzzleForm
+from .forms import NewPuzzleForm, SearchForm
 
 # Create your views here.
 
@@ -13,7 +13,7 @@ If not a POST route, or Puzzle is not valid,display a page with
 a list of puzzles and a form to add a new puzzle
 '''
 
-def puzzle_list(request):
+def add_puzzle(request):
     if request.method == 'POST':
         form = NewPuzzleForm(request.POST) 
         puzzle = form.save()#create a new Puzzle from the form
@@ -21,10 +21,22 @@ def puzzle_list(request):
             puzzle.save() #save Puzzle to the dbase
             return redirect('puzzle_list') #redirects to GET view w puzzle list (same view)
 
-#If not a POST, or formis not valid, render the page with empty form
+#If not a POST, or form is not valid, render the page with empty form
     puzzles = Puzzle.objects.order_by('name')
     new_puzzle_form = NewPuzzleForm()
     return render(request, 'puzzle_share/puzzlelist.html', { 'puzzles': puzzles, 'new_puzzle_form': new_puzzle_form })
+
+def puzzle_list(request):
+    search_form = SearchForm(request.GET)
+
+    if search_form.is_valid():
+        search_term = search_form.cleaned_data['search_term']
+        puzzles = Puzzle.objects.filter(name__icontains=search_term).order_by('name')
+    else:
+        search_form = SearchForm()
+        puzzles = Puzzle.objects.order_by('name')
+
+    return render(request, 'puzzle_share/puzzlelist.html', {'puzzles': puzzles, 'search_form': search_form})
 
 def puzzles_available(request):
     status = Puzzle.objects.filter(status=True).order_by('name')

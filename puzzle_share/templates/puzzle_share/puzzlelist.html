@@ -1,17 +1,23 @@
 {% extends 'puzzle_share/base.html' %}
 {% block content %}
 
-<h3> Add New Puzzles Here</h3>
+<a href="{% url 'puzzles_available' %}">Available Puzzles</a>
+<a href="{% url 'puzzles_checked_out' %}"> Puzzles Currently Checked Out</a>
+<hr>
 
-<form method="POST" action="{% url 'puzzle_list' %}">
+<h3> Add New Puzzles Here</h3>
+<form method="POST" action="{% url 'add_puzzle' %}">
     {% csrf_token %}
     {{ new_puzzle_form }}
     <button id="add-new-puzzle" type="submit">Add New Puzzle</button>
 </form>
-<P></P>
-<a href="{% url 'puzzles_available' %}">Available Puzzles</a>
-<a href="{% url 'puzzles_checked_out' %}"> Puzzles Currently Checked Out</a>
 
+
+<h4>Search</h4>
+<form method="GET" action="{% url 'puzzle_list' %}">
+    {{ search_form }}
+    <button type="submit">Search</button>
+</form>
 
 
 <h3> All Puzzles - Available and Checked Out</h3>
