@@ -8,7 +8,8 @@
     </head>
 
     <body>
-        <h1> Welcome to Puzzle Share</h1>
+        
+        <h1 id="site-header"> Welcome to Puzzle Share</h1>
 <hr>
         {% block content %}
         {% endblock %}
@@ -18,8 +19,9 @@
     <div>
         <p>A puzzle sharing site build with Django</p>
 
-        <a class = "nav-link" href="{% url 'puzzle_list' %}">Puzzles Available</a>
+        <a class = "nav-link" href="{% url 'puzzles_available' %}">Puzzles Available</a>
         <a class = "nav-link" href="{% url 'puzzles_checked_out' %}">Puzzles Checked Out</a>
+        <a class = "nav-link" href="{% url 'puzzle_list' %}">All Puzzles</a>
     </div>
     </body>
 

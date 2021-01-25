@@ -20,3 +20,14 @@ a.nav-link  {
     background-color: blue;
     border: darkblue;
 }
+
+#site-header {
+    
+    color: blue;
+    padding: 40px 00 40px 0 px;
+    text-align: center;
+}
+.check-out{
+    background-color:purple;;
+    border-color: purple;
+}

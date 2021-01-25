@@ -1,7 +1,11 @@
 {% extends 'puzzle_share/base.html' %}
 {% block content %}
 
-<h1>Puzzles Currently Checked Out</h1>
+
+<a href="{% url 'puzzle_list' %}">All Puzzles </a>
+<a href="{% url 'puzzles_available' %}">Puzzles Available</a>
+
+<h3>Puzzles Currently Checked Out</h3>
 
 {% if status %}
 
@@ -25,6 +29,6 @@
 
 {% endif %}
 
-<a href="{% url 'puzzle_list' %}">Puzzles Available</a>
+
 
 {% endblock %}

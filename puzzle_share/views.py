@@ -22,10 +22,13 @@ def puzzle_list(request):
             return redirect('puzzle_list') #redirects to GET view w puzzle list (same view)
 
 #If not a POST, or formis not valid, render the page with empty form
-    puzzles = Puzzle.objects.filter(status = True).order_by('name')
+    puzzles = Puzzle.objects.order_by('name')
     new_puzzle_form = NewPuzzleForm()
     return render(request, 'puzzle_share/puzzlelist.html', { 'puzzles': puzzles, 'new_puzzle_form': new_puzzle_form })
 
+def puzzles_available(request):
+    status = Puzzle.objects.filter(status=True).order_by('name')
+    return render(request, 'puzzle_share/available.html', { 'status': status})
 
 def puzzles_checked_out(request): #list of currently checked outpuzzles
     status = Puzzle.objects.filter(status = 2).order_by('name')
