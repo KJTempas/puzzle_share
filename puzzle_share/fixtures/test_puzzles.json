@@ -1,0 +1,44 @@
+[
+    {
+        "model":"puzzle_share.puzzle",
+        "pk":1,
+        "fields":{
+            "name": "Boston",
+            "pieces": 500,
+            "company": "BUPuzzles",
+            "status": 1
+        }
+    },
+    {
+        "model":"puzzle_share.puzzle",
+        "pk":2,
+        "fields":{
+            "name": "Montreal",
+            "pieces": 750,
+            "company": "McGill Puzzles",
+            "status": 2
+        }
+    },
+    {
+        "model":"puzzle_share.puzzle",
+        "pk":3,
+        "fields":{
+            "name": "NYC",
+            "pieces": 1000,
+            "company": "NYPuzzles",
+            "status": 1
+        }
+    },
+
+    {
+        "model":"puzzle_share.puzzle",
+        "pk":3,
+        "fields":{
+            "name": "Minnesota",
+            "pieces": 500,
+            "company": "MNPuzzles",
+            "status": 2
+        }
+
+    }
+]
