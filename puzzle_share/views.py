@@ -64,3 +64,6 @@ def puzzle_returned(request, puzzle_pk):
         puzzle.save()
     
     return redirect('puzzle_list')
+
+
+#TODO add pagination feature

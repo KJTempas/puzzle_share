@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 # Create your models here.
 
@@ -15,6 +16,7 @@ class Puzzle(models.Model):
         (1, ('Available to borrow')),
         (2, ('Borrowed by someone')),
     )
+    #user = models.ForeignKey('auth.User', null=False, on_delete=models.PROTECT)
     name = models.CharField(max_length=20)
     pieces = models.PositiveSmallIntegerField(choices=PIECES, default= 500,)
     company = models.CharField(max_length=20)#, help_text = 'Enter name of puzzle manufacturer')
