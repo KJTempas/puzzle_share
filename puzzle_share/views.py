@@ -17,9 +17,12 @@ a list of puzzles and a form to add a new puzzle
 def add_puzzle(request):
     if request.method == 'POST':
         form = NewPuzzleForm(request.POST) 
-        puzzle = form.save()#create a new Puzzle from the form
-        if form.is_valid(): #check against DB constraints
-            puzzle.save() #save Puzzle to the dbase
+        #puzzle = form.save()#create a new Puzzle from the form
+        if form.is_valid(): #check against DB constraints(which includes uniqueTogether)
+            try: #check if this puzzle is already in dbase; if so do not readd
+                puzzle = Puzzle.objects.get(name = name, pieces = pieces, company = company)
+            except:
+                puzzle.save() #save Puzzle to the dbase
             
             return redirect('puzzle_list') #redirects to GET view w puzzle list (same view)
        
@@ -41,15 +44,15 @@ def puzzle_list(request):
     return render(request, 'puzzle_share/puzzlelist.html', {'puzzles': puzzles, 'search_form': search_form})
 
 def puzzles_available(request):
-    status = Puzzle.objects.filter(status=True).order_by('name')
+    status = Puzzle.objects.filter(status=1).order_by('name')
     return render(request, 'puzzle_share/available.html', { 'status': status})
 
 def puzzles_checked_out(request): #list of currently checked outpuzzles
     status = Puzzle.objects.filter(status = 2).order_by('name')
     return render(request, 'puzzle_share/checked_out.html', { 'status': status})
     
-
-def puzzle_was_checked_out(request, puzzle_pk): #change from available to checked out
+#the following two methods change status of puzzles from avail to checked out or back
+def puzzle_checked_out(request, puzzle_pk): #change from available to checked out
     if request.method == 'POST':
         puzzle = get_object_or_404(Puzzle, pk=puzzle_pk) 
         puzzle.status = 2 #2 means checked out; 1 is available

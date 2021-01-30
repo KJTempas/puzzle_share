@@ -36,37 +36,27 @@ class TestViewHomePageIsEmptyList(TestCase):
 
 
 class TestPuzzleList(TestCase):
-    #fixtures are loaded into the dbase for all tests in this class
-    fixtures = ['test_puzzles']#, 'test_users']
 
-    # def setUp(self):
-    #     self.user = User.objects.get(pk=1)
-    #     self.client.force_login(self.user)
+    def test_view_puzzlelist_shows_all_in_expected_order(self):
+        #all puzzles, both status 1(available) and 2(checked_out appear on main puzzle_list page)
+        p1 = Puzzle.objects.create(name='Grasses', pieces = 500, company = 'GardenPuzzles', status = 1)
+        p2 = Puzzle.objects.create(name='Grasses-Natives', pieces = 750, company = 'GardenPuzzles', status = 2)
+        p3 = Puzzle.objects.create(name='Perennials', pieces = 1000, company = 'GardenPuzzles', status = 1)
+        p4 = Puzzle.objects.create(name = 'Pasque Flower ', pieces = 250, company = 'GardenPuzzles', status = 2)
 
-    def test_view_puzzlelist(self):
+        expected_puzzle_order = [p1,p2,p4,p3]
         response = self.client.get(reverse('puzzle_list'))
-        #make sure correct template used
-        self.assertTemplateUsed(response, 'puzzle_share/puzzlelist.html')
-#TODO fix this part - problem with user - is user needed?
-        data_rendered = list(response.context['puzzles'])
-        # #data in dbase; get all puzzles in fixtures
-        #problem on line below - need get?
-        #data_expected = list(Puzzle.objects)#.filter(user=self.user))
+        puzzles_in_template = list(response.context['puzzles'])
+        self.assertEqual(expected_puzzle_order, puzzles_in_template)
 
-        #self.assertCountEqual(data_rendered, data_expected)
+    def test_only_puzzles_checked_out_appear_on_checked_out_page(self): 
+        fixtures = ['test_puzzles']
+    #     p1 = Puzzle.objects.create(name='Grasses', pieces = 500, company = 'GardenPuzzles', status = 1)
+    #     p2 = Puzzle.objects.create(name='Grasses-Natives', pieces = 750, company = 'GardenPuzzles', status = 2)
+    #     p3 = Puzzle.objects.create(name='Perennials', pieces = 1000, company = 'GardenPuzzles', status = 1)
+    #     p4 = Puzzle.objects.create(name = 'Pasque Flower ', pieces = 250, company = 'GardenPuzzles', status = 2)
 
-    # def test_puzzles_checked_out(self):
-    #     response = self.client.get(reverse('puzzles_checked_out'))
-    #     #correct template used?
-    #     self.assertTemplateUsed(response, 'puzzle_share/checked_out.html')
-
-    #     #what data sent to template
-    #     data_rendered = list(response.context['status' == 2])
-    #     #data in dbase
-    #     data_expected = list(Puzzle.objects.filter(user=self.user).filter(status=2))
-    #     #same number?
-    #     self.assertCountEqual(data_rendered, data_expected)
-
+        
 
 class TestAddPuzzle(TestCase):
     #add puzzle; add to dbase, puzzle ID created
@@ -99,7 +89,8 @@ class TestAddPuzzle(TestCase):
 
 
 #TODO - test can't add duplicate puzzles(see videoApp)
-#TODO - test change status from available to checked_out(see wishlist)
+
+
 class TestStatusChange(TestCase):
     fixtures = ['test_puzzles']
 

@@ -23,7 +23,7 @@ a.nav-link  {
 }
 
 #site-header {
-    
+    background-color: darkgray;
     color: blue;
     padding: 40px 0 40px 0 px;
     text-align: center;
