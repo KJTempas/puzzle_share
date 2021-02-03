@@ -20,7 +20,12 @@
 
 <div class="puzzlelist-puzzle">
    <span class = "puzzle-details"> {{ puzzle }}</span>
-    
+    {% if puzzle.status == 1 %}
+    <p>Available</p>
+    {% endif %}
+    {% if puzzle.status == 2 %}
+    <p>Checked Out</p>
+    {% endif %}
 </div>
 
 {% empty %}
