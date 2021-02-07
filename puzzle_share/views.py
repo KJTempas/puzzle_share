@@ -17,10 +17,10 @@ a list of puzzles and a form to add a new puzzle
 def add_puzzle(request):
     if request.method == 'POST':
         form = NewPuzzleForm(request.POST) 
-        #puzzle = form.save()#create a new Puzzle from the form
+        puzzle = form.save()#create a new Puzzle from the form
         if form.is_valid(): #check against DB constraints(which includes uniqueTogether)
             try: #check if this puzzle is already in dbase; if so do not readd
-                puzzle = Puzzle.objects.get(name = name, pieces = pieces, company = company)
+                puzzle = Puzzle.objects.get(name = name, pieces = pieces, company = company)#, owner_last_name = owner_last_name)
             except:
                 puzzle.save() #save Puzzle to the dbase
             

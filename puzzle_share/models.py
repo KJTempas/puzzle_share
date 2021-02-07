@@ -22,9 +22,12 @@ class Puzzle(models.Model):
     company = models.CharField(max_length=20)#, help_text = 'Enter name of puzzle manufacturer')
     status = models.PositiveSmallIntegerField(choices=STATUS, default=1,)
     #status 1 = available; 0 means checked out
+    owner_last_name = models.CharField(max_length=20)
+    #when puzzle object created, checked out is set to blank; changes when puzzle is checked out
+    #checked_out_by_last_name = models.CharField(max_length=20)
 
     class Meta:
         #to avoid duplicate puzzles being aded, and puzzles, name, pieces, and company together are a unique entity
         unique_together = [['name', 'pieces', 'company']]
     def __str__(self):
-        return f'{self.name} with {self.pieces} pieces from {self.company}' #is available? {self.status}'
+        return f'{self.name} with {self.pieces} pieces from {self.company}' 
