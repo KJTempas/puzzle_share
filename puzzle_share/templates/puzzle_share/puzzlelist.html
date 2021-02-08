@@ -24,7 +24,7 @@
     <p>Available</p>
     {% endif %}
     {% if puzzle.status == 2 %}
-    <p>Checked Out</p>
+    <p>Checked Out by {{ puzzle.user_last_name }}</p>
     {% endif %}
 </div>
 

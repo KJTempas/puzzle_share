@@ -24,7 +24,7 @@ class Puzzle(models.Model):
     #status 1 = available; 0 means checked out
     owner_last_name = models.CharField(max_length=20)
     #when puzzle object created, checked out is set to blank; changes when puzzle is checked out
-    #checked_out_by_last_name = models.CharField(max_length=20)
+    user_last_name = models.CharField(max_length=20, default = "")
 
     class Meta:
         #to avoid duplicate puzzles being aded, and puzzles, name, pieces, and company together are a unique entity

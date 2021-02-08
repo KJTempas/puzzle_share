@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Puzzle
-from .forms import NewPuzzleForm, SearchForm
+from .forms import NewPuzzleForm, SearchForm, NameForm
 from django.contrib import messages
 
 # Create your views here.
@@ -33,7 +33,6 @@ def add_puzzle(request):
 
 def puzzle_list(request):
     search_form = SearchForm(request.GET)
-
     if search_form.is_valid():
         search_term = search_form.cleaned_data['search_term']
         puzzles = Puzzle.objects.filter(name__icontains=search_term).order_by('name')
@@ -47,18 +46,33 @@ def puzzles_available(request):
     status = Puzzle.objects.filter(status=1).order_by('name')
     return render(request, 'puzzle_share/available.html', { 'status': status})
 
+#TODO change name of this method to all_puzzles.....
 def puzzles_checked_out(request): #list of currently checked outpuzzles
     status = Puzzle.objects.filter(status = 2).order_by('name')
     return render(request, 'puzzle_share/checked_out.html', { 'status': status})
     
 #the following two methods change status of puzzles from avail to checked out or back
 def puzzle_checked_out(request, puzzle_pk): #change from available to checked out
+    #if a POST request, need to process the form data
     if request.method == 'POST':
-        puzzle = get_object_or_404(Puzzle, pk=puzzle_pk) 
-        puzzle.status = 2 #2 means checked out; 1 is available
-        puzzle.save()
-    
+        #create form instance and populate w/ data from request
+        form = NameForm(request.POST)
+        #check whether data is valid (not empty)
+        #checked_out = form.save()
+        if form.is_valid(): #then process data
+            user_last_name = form.cleaned_data['user_last_name']
+            #get puzzle with pk and update it's fields
+            puzzle = get_object_or_404(Puzzle, pk=puzzle_pk) 
+            puzzle.status = 2 #2 means checked out; 1 is available
+            puzzle.user_last_name = user_last_name 
+            puzzle.save()
+
+    else: #if a GET (or other method), create a blank form
+        form = NameForm()
+
     return redirect('puzzle_list')
+
+
 
 def puzzle_returned(request, puzzle_pk):
     if request.method =='POST':

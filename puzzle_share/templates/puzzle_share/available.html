@@ -13,12 +13,18 @@
     <div class="puzzlelist-puzzle">
     <span class = "puzzle-details"> {{ puzzle }}</span>
    
-    <form class="checked-out-form" method="POST" action="{% url 'puzzle_checked_out' puzzle.pk %}">
+    <form method="POST" action="{% url 'puzzle_checked_out' puzzle.pk %}">
+        <label for="user_last_name">Enter your last name to check out this puzzle:</label>
+        <input id="user_last_name"  type="text" name="user_last_name" required
+        user_last_name = "user_last_name" value="{{current_name }}">
         {% csrf_token %}
-        <button class="check-out" type="submit">Check Out</button>
+        {{ form }}
+       
+        <!-- <button class="check-out" type="submit">Check Out</button> -->
+        <input type="submit" value="Check Out">
     </form>
 
-
+    
     
  
  </div>
