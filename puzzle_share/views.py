@@ -78,6 +78,7 @@ def puzzle_returned(request, puzzle_pk):
     if request.method =='POST':
         puzzle = Puzzle.objects.get(pk=puzzle_pk)
         puzzle.status = 1
+        puzzle.user_last_name = ""
         puzzle.save()
     
     return redirect('puzzle_list')
