@@ -1,4 +1,5 @@
 {% extends 'puzzle_share/base.html' %}
+{% load static %}
 {% block content %}
 
 <a class = "nav-link" href="{% url 'puzzles_available' %}">Puzzles Available</a>
@@ -19,14 +20,22 @@
 {% for puzzle in puzzles %}
 
 <div class="puzzlelist-puzzle">
-   <span class = "puzzle-details"> {{ puzzle }}</span>
+
+    <span id="puzzle-name-{{ puzzle.pk }}" class="puzzle-details">
+        <a href="{% url 'puzzle_details' puzzle_pk=puzzle.pk %}">{{ puzzle.name }} with {{puzzle.pieces}} pieces</a>
+    
     {% if puzzle.status == 1 %}
     <p>Available</p>
     {% endif %}
     {% if puzzle.status == 2 %}
-    <p>Checked Out by {{ puzzle.user_last_name }}</p>
+    <p>Checked out by {{ puzzle.user_last_name }}</p>
     {% endif %}
+</span>
 </div>
+
+
+
+<script src="{% static 'js/confirm_delete.js' %}"></script>
 
 {% empty %}
 

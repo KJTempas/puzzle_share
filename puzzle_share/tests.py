@@ -7,6 +7,8 @@ from django.urls import reverse
 from django.test import override_settings
 
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
+from django.db import IntegrityError, transaction
 from .models import Puzzle
 
 
@@ -64,7 +66,8 @@ class TestAddPuzzle(TestCase):
         new_puzzle = {
             'name': 'Garden',
             'pieces': 500,
-            'company': 'Ravensburger'
+            'company': 'Ravensburger',
+            'owner_last_name': 'Tempas'
         }
 
         response = self.client.post(reverse('add_puzzle'), data = new_puzzle, follow=True)
@@ -76,7 +79,6 @@ class TestAddPuzzle(TestCase):
         self.assertContains(response, 500)
         self.assertContains(response, 'Ravensburger')
         self.assertContains(response, 1) #1 = status available and is default 
-    
         #one puzzle in dbase
         puzzle_count = Puzzle.objects.count()
         self.assertEqual(1, puzzle_count)
@@ -86,11 +88,34 @@ class TestAddPuzzle(TestCase):
         self.assertEqual('Garden', puzzle.name)
         self.assertEqual(500, puzzle.pieces)
         self.assertEqual('Ravensburger', puzzle.company)
+        self.assertEqual('Tempas', puzzle.owner_last_name)
 
 
-#TODO - test can't add duplicate puzzles(see videoApp)
+#TODO - test can't add duplicate puzzles - not working
+    # def test_duplicate_puzzle_does_not_add_to_dbase(self):
+    #     #transaction atomic means dbase will be rolled back to previous if add not successful
+    #     with transaction.atomic():
+    #         new_puzzle = {
+    #             'name': 'Garden',
+    #             'pieces': 500,
+    #             'company': 'Ravensburger',
+    #             'owner_last_name': 'Tempas'
+    #         }
+    #         Puzzle.objects.create(**new_puzzle) #unpack dictionary above to create new puzzle object
+    #         puzzle_count = Puzzle.objects.count()
+    #         self.assertEqual(1, puzzle_count)   
 
+    #     with transaction.atomic():
+    #         #try to add puzzle again
+    #         response = self.client.post(reverse('add_puzzle'), data = new_puzzle)#, follow=True)
+    #         messages = response.context['messages']
+    #         message_texts = [ message.message for message in messages ]
+    #         self.assertIn('You already added that puzzle', message_texts)
+    #     #still one puzzle in dbase
+    #     puzzle_count = Puzzle.objects.count()    
+    #     self.assertEqual(1, puzzle_count)   
 
+     
 class TestStatusChange(TestCase):
     fixtures = ['test_puzzles']
 
@@ -134,3 +159,14 @@ class TestSearch(TestCase):
         puzzles_in_template = response.context['puzzles']
         self.assertContains(response, 'No puzzles')
         self.assertEquals(0, len(puzzles_in_template))
+
+class TestUserName(TestCase):
+
+    def test_user_name_added_when_puzzle_checked_out(self):
+        pass#use fixtures?
+
+    def test_user_name_deleted_when_puzzle_returned(self):
+        pass
+        # p1 = Puzzle.objects.create(name='Perennials', pieces = 1000, company = 'GardenPuzzles', owner_last_name = "Tempas")
+        # user_last_name = "Jilka"
+        # response = self.client.get(reverse('puzzle_checked_out', args=(p1,)),follow=True)))

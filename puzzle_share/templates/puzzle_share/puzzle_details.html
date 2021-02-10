@@ -1,0 +1,23 @@
+{% extends 'puzzle_share/base.html' %}
+{% load static %}
+{% block content %}
+
+
+<a class = "nav-link" href="{% url 'puzzles_available' %}">Puzzles Available</a>
+<a class = "nav-link" href="{% url 'puzzles_checked_out' %}"> Puzzles Currently Checked Out</a>
+<a class = "nav-link" href="{% url 'add_puzzle' %}">Add a Puzzle</a>
+<hr>
+
+
+<div class="puzzlelist-puzzle">
+    {{ puzzle }}
+</div>
+
+<form action="{% url 'delete_puzzle' puzzle.pk %}" method="POST">
+    {% csrf_token %}
+    <button type=submit class="delete">Delete puzzle</button>
+</form>
+
+
+<script src="{% static 'js/confirm_delete.js' %}"></script>
+{% endblock %}

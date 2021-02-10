@@ -32,3 +32,8 @@ a.nav-link  {
     background-color:purple;;
     border-color: purple;
 }
+/*in puzzle detail*/
+.delete{
+    background-color:crimson;
+    border-color: darkred;
+}

@@ -30,4 +30,4 @@ class Puzzle(models.Model):
         #to avoid duplicate puzzles being aded, and puzzles, name, pieces, and company together are a unique entity
         unique_together = [['name', 'pieces', 'company']]
     def __str__(self):
-        return f'{self.name} with {self.pieces} pieces from {self.company}' 
+        return f'{self.name} with {self.pieces} pieces from {self.company} owned by {self.owner_last_name}' 

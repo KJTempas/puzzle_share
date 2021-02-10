@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Puzzle
-from .forms import NewPuzzleForm, SearchForm, NameForm
 from django.contrib import messages
+from .forms import NewPuzzleForm, SearchForm, NameForm
+from django.db import IntegrityError
 
 # Create your views here.
 
@@ -20,13 +21,14 @@ def add_puzzle(request):
         puzzle = form.save()#create a new Puzzle from the form
         if form.is_valid(): #check against DB constraints(which includes uniqueTogether)
             try: #check if this puzzle is already in dbase; if so do not readd
-                puzzle = Puzzle.objects.get(name = name, pieces = pieces, company = company)#, owner_last_name = owner_last_name)
+                puzzle = Puzzle.objects.get(name = name, pieces = pieces, company = company)#), owner_last_name = owner_last_name)
             except:
                 puzzle.save() #save Puzzle to the dbase
-            
+
             return redirect('puzzle_list') #redirects to GET view w puzzle list (same view)
-       
-#If not a POST, or form is not valid, render the page with empty form
+     
+
+#If not a POST, (so a GET) or form is not valid, render the page with empty form
     puzzles = Puzzle.objects.order_by('name')
     new_puzzle_form = NewPuzzleForm()
     return render(request, 'puzzle_share/add.html', { 'puzzles': puzzles, 'new_puzzle_form': new_puzzle_form })
@@ -73,7 +75,6 @@ def puzzle_checked_out(request, puzzle_pk): #change from available to checked ou
     return redirect('puzzle_list')
 
 
-
 def puzzle_returned(request, puzzle_pk):
     if request.method =='POST':
         puzzle = Puzzle.objects.get(pk=puzzle_pk)
@@ -83,5 +84,14 @@ def puzzle_returned(request, puzzle_pk):
     
     return redirect('puzzle_list')
 
+
+def puzzle_details(request, puzzle_pk):
+    puzzle = get_object_or_404(Puzzle, pk=puzzle_pk)
+    return render(request, 'puzzle_share/puzzle_details.html', {'puzzle': puzzle} )
+
+def delete_puzzle(request, puzzle_pk):
+    puzzle = get_object_or_404(Puzzle, pk=puzzle_pk)
+    puzzle.delete()
+    return redirect('puzzle_list')
 
 #TODO add pagination feature
