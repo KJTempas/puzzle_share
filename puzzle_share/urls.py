@@ -9,5 +9,5 @@ urlpatterns = [
     path('available', views.puzzles_available, name='puzzles_available'),
     path('add_puzzle', views.add_puzzle, name='add_puzzle'),
     path('puzzle/<int:puzzle_pk>', views.puzzle_details, name='puzzle_details'),
-    path('puzzle/<int:puzzle_pk>', views.delete_puzzle, name='delete_puzzle')
+    path('puzzle/<int:puzzle_pk>/delete', views.delete_puzzle, name='delete_puzzle')
 ]
