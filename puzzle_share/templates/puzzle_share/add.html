@@ -3,7 +3,7 @@
 
 <h3> Add New Puzzles</h3>
 
-<form method="POST" action="{% url 'add_puzzle' %}">
+<form method="POST" action="{% url 'add_puzzle' %}" enctype="multipart/form-data">
     {% csrf_token %}
     {{ new_puzzle_form }}
     <button id="add-new-puzzle" type="submit">Add New Puzzle</button>

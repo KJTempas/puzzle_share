@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.core.files.storage import default_storage
 
 # Create your models here.
 
@@ -25,9 +26,15 @@ class Puzzle(models.Model):
     owner_last_name = models.CharField(max_length=20)
     #when puzzle object created, checked out is set to blank; changes when puzzle is checked out
     user_last_name = models.CharField(max_length=20, default = "")
-
+    photo = models.ImageField(upload_to='user_images/', blank=True, null=True)
+    
+    #may need to override save method if photo replaced; have separate delete photo method
+    #see wishlist/models
+    
     class Meta:
         #to avoid duplicate puzzles being aded, and puzzles, name, pieces, and company together are a unique entity
         unique_together = [['name', 'pieces', 'company']]
     def __str__(self):
+        photo_str = self.photo.url if self.photo else 'no photo'
+
         return f'{self.name} with {self.pieces} pieces from {self.company} owned by {self.owner_last_name}' 

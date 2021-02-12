@@ -11,7 +11,7 @@
 
     {% for puzzle in status %}
     <div class="puzzlelist-puzzle">
-    <span class = "puzzle-details"> {{ puzzle }}</span>
+    <span class = "puzzle-details"> {{ puzzle }} checked out by {{ puzzle.user_last_name }}</span>
    
     <form class="checked-out-form" method="POST" action="{% url 'puzzle_returned' puzzle.pk %}">
         {% csrf_token %}

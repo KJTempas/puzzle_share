@@ -2,15 +2,20 @@
 {% load static %}
 {% block content %}
 
-
+<a class = "nav-link" href="{% url 'puzzle_list' %}">All Puzzles</a>
 <a class = "nav-link" href="{% url 'puzzles_available' %}">Puzzles Available</a>
 <a class = "nav-link" href="{% url 'puzzles_checked_out' %}"> Puzzles Currently Checked Out</a>
 <a class = "nav-link" href="{% url 'add_puzzle' %}">Add a Puzzle</a>
 <hr>
 
-
+<h6> To checkout this puzzle, select Puzzles Available from the navigation bar</h6>
 <div class="puzzlelist-puzzle">
     {{ puzzle }}
+    {% if puzzle.photo %}
+        <img src="{{ puzzle.photo.url }}">
+    {% else %}
+        <p>No photo available</p>
+    {% endif %}
 </div>
 
 <form action="{% url 'delete_puzzle' puzzle.pk %}" method="POST">
