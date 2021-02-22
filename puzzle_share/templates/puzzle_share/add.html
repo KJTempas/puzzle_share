@@ -1,14 +1,18 @@
 {% extends 'puzzle_share/base.html' %}
 {% block content %}
 
-<h3> Add New Puzzles</h3>
+<h3> Add New Puzzle</h3>
+
+{% for message in messages %}
+    <li>{{ message }}</li>
+{% endfor %}
+
 
 <form method="POST" action="{% url 'add_puzzle' %}" enctype="multipart/form-data">
     {% csrf_token %}
     {{ new_puzzle_form }}
     <button id="add-new-puzzle" type="submit">Add New Puzzle</button>
 </form>
-
 
 
 

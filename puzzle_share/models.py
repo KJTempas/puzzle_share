@@ -28,7 +28,7 @@ class Puzzle(models.Model):
     user_last_name = models.CharField(max_length=20, default = "")
     photo = models.ImageField(upload_to='user_images/', blank=True, null=True)
     
-    #may need to override save method if photo replaced; have separate delete photo method
+    #may need to override save method if photo replaced; 
     #see wishlist/models
     
     class Meta:

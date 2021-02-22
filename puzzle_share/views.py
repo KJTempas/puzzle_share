@@ -1,14 +1,15 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Puzzle
-from django.contrib import messages
+from django.contrib import messages #temp messages shown to user
+
 from .forms import NewPuzzleForm, SearchForm, NameForm
+from django.core.exceptions import ValidationError
 from django.db import IntegrityError
 
-# Create your views here.
 
 '''If this is a POST request, the user clicked the Add button
 in the form. Check if the new puzzle is valid, if so, save a
-new Puzzle to the dbase, and redirect to this same page.
+new Puzzle to the dbase, and redirect to whatever page you want.
 This creates a GET request to this same route
 
 If not a POST route, or Puzzle is not valid,display a page with
@@ -18,20 +19,33 @@ a list of puzzles and a form to add a new puzzle
 def add_puzzle(request):
     if request.method == 'POST':
         form = NewPuzzleForm(request.POST, request.FILES) 
-        puzzle = form.save()#create a new Puzzle from the form
+        #puzzle = form.save()#create a new Puzzle from the form
         if form.is_valid(): #check against DB constraints(which includes uniqueTogether)
-            try: #check if this puzzle is already in dbase; if so do not readd
-                puzzle = Puzzle.objects.get(name = name, pieces = pieces, company = company)#), owner_last_name = owner_last_name)
-            except:
-                puzzle.save() #save Puzzle to the dbase
+            #NEXT 5 lines are original
+            # try: #check if this puzzle is already in dbase; if so do not readd
+            #     puzzle = Puzzle.objects.get(name = name, pieces = pieces, company = company)#), owner_last_name = owner_last_name)
+            # except:
+            #     puzzle.save() #save Puzzle to the dbase
 
-            return redirect('puzzle_list') #redirects to GET view w puzzle list (same view)
-     
+            # return redirect('puzzle_list') #redirects to GET view w puzzle list (same view)
+            try:
+                form.save()
+                #messages.info(request, 'Puzzle added') #not showing because of redirects
+                return redirect('puzzle_list')
+               # puzzle = Puzzle.objects.get(name = name, pieces = pieces, company = company)#), owner_last_name = owner_last_name)
+            except ValidationError:
+                messages.warning(request, 'Invalid data')
+            except IntegrityError:
+                messages.warning(request, 'You already added that puzzle')
+            #puzzle.save() #save Puzzle to the dbase
+            return render(request, 'puzzle_share/add.html', {'new_puzzle_form': new_puzzle_form})
+            #return redirect('puzzle_list')
+          
 
 #If not a POST, (so a GET) or form is not valid, render the page with empty form
-    puzzles = Puzzle.objects.order_by('name')
+    #puzzles = Puzzle.objects.order_by('name')
     new_puzzle_form = NewPuzzleForm()
-    return render(request, 'puzzle_share/add.html', { 'puzzles': puzzles, 'new_puzzle_form': new_puzzle_form })
+    return render(request, 'puzzle_share/add.html', {  'new_puzzle_form': new_puzzle_form })
 
 def puzzle_list(request):
     search_form = SearchForm(request.GET)
