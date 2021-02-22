@@ -18,7 +18,7 @@ class Puzzle(models.Model):
         (2, ('Borrowed by someone')),
     )
     #user = models.ForeignKey('auth.User', null=False, on_delete=models.PROTECT)
-    name = models.CharField(max_length=20)
+    name = models.CharField(max_length=30)
     pieces = models.PositiveSmallIntegerField(choices=PIECES, default= 500,)
     company = models.CharField(max_length=20)#, help_text = 'Enter name of puzzle manufacturer')
     status = models.PositiveSmallIntegerField(choices=STATUS, default=1,)
@@ -34,6 +34,19 @@ class Puzzle(models.Model):
     class Meta:
         #to avoid duplicate puzzles being aded, and puzzles, name, pieces, and company together are a unique entity
         unique_together = [['name', 'pieces', 'company']]
+
+
+
+    def delete_photo(self,photo):
+        if default_storage.exists(photo.name):
+            default_storage.delete(photo.name)
+
+    def delete(self, *args, **kwargs):
+        if self.photo:
+            self.delete_photo(self.photo) #call method above
+            #call through to Django super fx to do the actual delete
+            super().delete(*args, **kwargs)
+
     def __str__(self):
         photo_str = self.photo.url if self.photo else 'no photo'
 
