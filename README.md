@@ -1,7 +1,7 @@
 # Puzzle Share
 
 ### An app to share jigsaw puzzles with friends and neighbors
-
+Add new puzzles(name, # of pieces, mfg company, owner, picture), see what puzzles are available, checkout and return puzzles.
 ### To install
 #### Virtual Environment
 Create and activate a virtual environment. Use Python3 as the interpreter. Suggest locating the venv/ directory outside of the code directory
