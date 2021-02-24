@@ -5,6 +5,7 @@ from django.contrib import messages #temp messages shown to user
 from .forms import NewPuzzleForm, SearchForm, NameForm
 from django.core.exceptions import ValidationError
 from django.db import IntegrityError
+from django.db.models.functions import Lower
 
 
 '''If this is a POST request, the user clicked the Add button
@@ -51,10 +52,10 @@ def puzzle_list(request):
     search_form = SearchForm(request.GET)
     if search_form.is_valid():
         search_term = search_form.cleaned_data['search_term']
-        puzzles = Puzzle.objects.filter(name__icontains=search_term).order_by('name')
+        puzzles = Puzzle.objects.filter(name__icontains=search_term).order_by(Lower('name'))
     else:
         search_form = SearchForm()
-        puzzles = Puzzle.objects.order_by('name')
+        puzzles = Puzzle.objects.order_by(Lower('name'))
 
     return render(request, 'puzzle_share/puzzlelist.html', {'puzzles': puzzles, 'search_form': search_form})
 
@@ -109,3 +110,4 @@ def delete_puzzle(request, puzzle_pk):
     return redirect('puzzle_list')
 
 #TODO add pagination feature
+#TODO be able to edit puzzle info - change piece, manufacturer

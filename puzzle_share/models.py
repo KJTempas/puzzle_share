@@ -36,16 +36,18 @@ class Puzzle(models.Model):
         unique_together = [['name', 'pieces', 'company']]
 
 
+    def delete(self, *args, **kwargs):
+        if self.photo:
+            self.delete_photo(self.photo) #call method below
+            #call through to Django super fx to do the actual delete
+            super().delete(*args, **kwargs)
+            
+
 
     def delete_photo(self,photo):
         if default_storage.exists(photo.name):
             default_storage.delete(photo.name)
 
-    def delete(self, *args, **kwargs):
-        if self.photo:
-            self.delete_photo(self.photo) #call method above
-            #call through to Django super fx to do the actual delete
-            super().delete(*args, **kwargs)
 
     def __str__(self):
         photo_str = self.photo.url if self.photo else 'no photo'

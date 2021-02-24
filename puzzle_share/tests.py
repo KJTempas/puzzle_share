@@ -188,11 +188,33 @@ class TestSearch(TestCase):
         self.assertContains(response, 'No puzzles')
         self.assertEquals(0, len(puzzles_in_template))
 
+class TestDelete(TestCase):
+#NOT WORKING - not sure why
+    fixtures=['test_puzzles']
+
+    def test_delete_puzzle_no_picture_deletes(self): 
+        #put 3 puzzles in dbase
+        # p1 = Puzzle.objects.create(name='Grasses', pieces = 500, company = 'GardenPuzzles', )
+        # p2 = Puzzle.objects.create(name='Natives', pieces = 750, company = 'GardenPuzzles')
+        # p3 = Puzzle.objects.create(name='Perennials', pieces = 1000, company = 'GardenPuzzles')
+        response = self.client.post(reverse('delete_puzzle', args=(2,)), follow=True)
+        puzzle_2 = Puzzle.objects.filter(pk=2).first()
+        self.assertIsNone(puzzle_2)
+
 class TestUserName(TestCase):
 
-    def test_user_name_added_when_puzzle_checked_out(self):
-        pass#use fixtures?
-
+    # def test_user_name_added_when_puzzle_checked_out(self):
+    #     new_puzzle = {
+    #         'name': 'Garden',
+    #         'pieces': 500,
+    #         'company': 'Ravensburger',
+    #         'owner_last_name': 'Tempas'
+    #     }
+    #     #add puzzle
+    #     response = self.client.post(reverse('add_puzzle'), data = new_puzzle, follow=True)
+    #    #checkout puzzle
+    #     response = self.client.post(reverse('puzzle_checked_out', args=(3,)),follow=True)
+       
     def test_user_name_deleted_when_puzzle_returned(self):
         pass
         # p1 = Puzzle.objects.create(name='Perennials', pieces = 1000, company = 'GardenPuzzles', owner_last_name = "Tempas")
