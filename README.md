@@ -32,5 +32,8 @@ will be able to use these to log into admin console at
 
 https://127.0.0.1:8000/admin
 
+#### Screenshots
+![Screen Shot 2021-02-25 at 1 22 10 PM](https://user-images.githubusercontent.com/54478043/109211381-c2ea2000-7773-11eb-9a23-0fa55c3b9c31.png)
+
 #### Run tests
 python manage.py test puzzle_share.tests
