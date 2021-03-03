@@ -24,7 +24,7 @@
 <div class="puzzlelist-puzzle">
 
     <span id="puzzle-name-{{ puzzle.pk }}" class="puzzle-details">
-        <a href="{% url 'puzzle_details' puzzle_pk=puzzle.pk %}">{{ puzzle.name }} with {{puzzle.pieces}} pieces</a>
+        <a href="{% url 'puzzle_details' puzzle_pk=puzzle.pk %}">{{ puzzle.name }} with {{puzzle.pieces}} pieces owned by {{puzzle.owner_last_name }}</a>
     
     {% if puzzle.status == 1 %}
     <p>Available</p>
@@ -44,5 +44,21 @@
 <P> No puzzles match search term</P>
 
 {% endfor %}
+
+<div class="pagination">
+    <div class="section-inner clearfix">
+        <p>
+            {% if puzzles.has_previous %}
+              <a href="?page={{ puzzles.previous_page_number }}">&lt; Prev</a> |
+            {% endif %}
+
+            {% if puzzles.has_next %}
+              <a href="?page={{ puzzles.next_page_number }}">Next &gt;</a>
+            {% endif %}
+
+            <span>Page {{ puzzles.number }} of {{ puzzles.paginator.num_pages }}</span>
+        </p>
+    </div>
+</div>
 
 {% endblock %}

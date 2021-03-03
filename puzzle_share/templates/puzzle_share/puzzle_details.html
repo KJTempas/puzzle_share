@@ -8,19 +8,36 @@
 <a class = "nav-link" href="{% url 'add_puzzle' %}">Add a Puzzle</a>
 <hr>
 
-<h6> To checkout this puzzle, select Puzzles Available from the navigation bar</h6>
+<h6> To check out this puzzle, select Puzzles Available from the navigation bar</h6>
+<h6> To return this puzzle, select Puzzles Currently Checked Out from the navigation bar</h6>
+{% if puzzle.status == 1 %}
+    <p>This puzzle is currenly Available</p>
+    {% endif %}
+    {% if puzzle.status == 2 %}
+    <p>This puzzle is currently Checked Out by {{ puzzle.user_last_name }}</p>
+    {% endif %}
+
 <div class="puzzlelist-puzzle">
     {{ puzzle }}
     {% if puzzle.photo %}
-        <img src="{{ puzzle.photo.url }}">
+        <img class= "user-image" src="{{ puzzle.photo.url }}">
     {% else %}
         <p>No photo available</p>
     {% endif %}
 </div>
 
+<form method="POST" action="{% url 'edit_puzzle_details' puzzle.pk %}">
+    <div>
+      {% csrf_token %}
+      {{ form.as_p }}
+    </div>
+    
+    <button type=submit class = 'edit'>Edit Puzzle</button> 
+
+
 <form action="{% url 'delete_puzzle' puzzle.pk %}" method="POST">
     {% csrf_token %}
-    <button type=submit class="delete">Delete puzzle</button>
+    <button type=submit class='delete'>Delete puzzle</button>
 </form>
 
 

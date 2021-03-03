@@ -6,7 +6,7 @@ from .forms import NewPuzzleForm, SearchForm, NameForm
 from django.core.exceptions import ValidationError
 from django.db import IntegrityError
 from django.db.models.functions import Lower
-
+from puzzle_share import helpers
 
 '''If this is a POST request, the user clicked the Add button
 in the form. Check if the new puzzle is valid, if so, save a
@@ -56,7 +56,10 @@ def puzzle_list(request):
     else:
         search_form = SearchForm()
         puzzles = Puzzle.objects.order_by(Lower('name'))
-
+          # get page number to be supplied to pagination for page number display
+        page = request.GET.get('page')
+    # Calls helper function to paginate records. (request, list of objects, how many entries per page)
+        puzzles = helpers.pg_records(page, puzzles, 5)
     return render(request, 'puzzle_share/puzzlelist.html', {'puzzles': puzzles, 'search_form': search_form})
 
 def puzzles_available(request):
@@ -109,5 +112,22 @@ def delete_puzzle(request, puzzle_pk):
     puzzle.delete()
     return redirect('puzzle_list')
 
-#TODO add pagination feature
+
 #TODO be able to edit puzzle info - change piece, manufacturer
+def edit_puzzle_details(request, puzzle_pk):
+    """Make changes to a puzzle's name, company, number of pieces, photo"""
+    puzzle = get_object_or_404(Puzzle, pk=puzzle_pk)
+    if request.method == 'POST':
+        #retrieve this puzzle's (this instance) current data
+        form = NewPuzzleForm(request.POST, request.FILES, instance=puzzle)
+
+        if form.is_valid():
+            puzzle = form.save(commit=False)
+            puzzle.save()
+#if edit puzzle, it will revert to available, I think
+        return redirect('puzzle_list')
+        #else: # create a the populated form again????
+       #     form = NewPuzzleForm(request.POST, request.FILES, instance=puzzle)
+
+
+#TODO add pagination feature

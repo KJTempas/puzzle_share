@@ -41,6 +41,8 @@ class Puzzle(models.Model):
             self.delete_photo(self.photo) #call method below
             #call through to Django super fx to do the actual delete
             super().delete(*args, **kwargs)
+        else:
+            super().delete(*args, **kwargs)  
             
 
 

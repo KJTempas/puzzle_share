@@ -37,3 +37,8 @@ a.nav-link  {
     background-color:crimson;
     border-color: darkred;
 }
+
+.user-image{
+    max-width: 70%;
+    max-height: 50%;
+}
