@@ -130,4 +130,3 @@ def edit_puzzle_details(request, puzzle_pk):
        #     form = NewPuzzleForm(request.POST, request.FILES, instance=puzzle)
 
 
-#TODO add pagination feature
