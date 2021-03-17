@@ -3,10 +3,11 @@ from .models import Puzzle
 from django.contrib import messages #temp messages shown to user
 
 from .forms import NewPuzzleForm, SearchForm, NameForm
+#from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ValidationError
 from django.db import IntegrityError
 from django.db.models.functions import Lower
-from puzzle_share import helpers
+from puzzle_share import helpers #used for pagination
 
 '''If this is a POST request, the user clicked the Add button
 in the form. Check if the new puzzle is valid, if so, save a
@@ -16,7 +17,7 @@ This creates a GET request to this same route
 If not a POST route, or Puzzle is not valid,display a page with
 a list of puzzles and a form to add a new puzzle
 '''
-
+#@login_required
 def add_puzzle(request):
     if request.method == 'POST':
         form = NewPuzzleForm(request.POST, request.FILES) 
@@ -31,7 +32,7 @@ def add_puzzle(request):
             # return redirect('puzzle_list') #redirects to GET view w puzzle list (same view)
             try:
                 form.save()
-                #messages.info(request, 'Puzzle added') #not showing because of redirects
+                messages.info(request, 'Puzzle added') #not showing because of redirects
                 return redirect('puzzle_list')
                # puzzle = Puzzle.objects.get(name = name, pieces = pieces, company = company)#), owner_last_name = owner_last_name)
             except ValidationError:
@@ -48,6 +49,8 @@ def add_puzzle(request):
     new_puzzle_form = NewPuzzleForm()
     return render(request, 'puzzle_share/add.html', {  'new_puzzle_form': new_puzzle_form })
 
+
+#@login_required
 def puzzle_list(request):
     search_form = SearchForm(request.GET)
     if search_form.is_valid():
@@ -62,16 +65,22 @@ def puzzle_list(request):
         puzzles = helpers.pg_records(page, puzzles, 5)
     return render(request, 'puzzle_share/puzzlelist.html', {'puzzles': puzzles, 'search_form': search_form})
 
+
+#@login_required
 def puzzles_available(request):
     status = Puzzle.objects.filter(status=1).order_by('name')
     return render(request, 'puzzle_share/available.html', { 'status': status})
 
+
 #TODO change name of this method to all_puzzles.....
+#@login_required
 def puzzles_checked_out(request): #list of currently checked outpuzzles
     status = Puzzle.objects.filter(status = 2).order_by('name')
     return render(request, 'puzzle_share/checked_out.html', { 'status': status})
     
+
 #the following two methods change status of puzzles from avail to checked out or back
+#@login_required
 def puzzle_checked_out(request, puzzle_pk): #change from available to checked out
     #if a POST request, need to process the form data
     if request.method == 'POST':
@@ -93,6 +102,7 @@ def puzzle_checked_out(request, puzzle_pk): #change from available to checked ou
     return redirect('puzzle_list')
 
 
+#@login_required
 def puzzle_returned(request, puzzle_pk):
     if request.method =='POST':
         puzzle = Puzzle.objects.get(pk=puzzle_pk)
@@ -103,10 +113,12 @@ def puzzle_returned(request, puzzle_pk):
     return redirect('puzzle_list')
 
 
+#@login_required
 def puzzle_details(request, puzzle_pk):
     puzzle = get_object_or_404(Puzzle, pk=puzzle_pk)
     return render(request, 'puzzle_share/puzzle_details.html', {'puzzle': puzzle} )
 
+#@login_required
 def delete_puzzle(request, puzzle_pk):
     puzzle = get_object_or_404(Puzzle, pk=puzzle_pk)
     puzzle.delete()
@@ -114,19 +126,21 @@ def delete_puzzle(request, puzzle_pk):
 
 
 #TODO be able to edit puzzle info - change piece, manufacturer
-def edit_puzzle_details(request, puzzle_pk):
-    """Make changes to a puzzle's name, company, number of pieces, photo"""
-    puzzle = get_object_or_404(Puzzle, pk=puzzle_pk)
-    if request.method == 'POST':
-        #retrieve this puzzle's (this instance) current data
-        form = NewPuzzleForm(request.POST, request.FILES, instance=puzzle)
+#NOT working yet
+#@login_required
+# def edit_puzzle_details(request, puzzle_pk):
+#     """Make changes to a puzzle's name, company, number of pieces, photo"""
+#     puzzle = get_object_or_404(Puzzle, pk=puzzle_pk)
+#     if request.method == 'POST':
+#         #retrieve this puzzle's (this instance) current data
+#         form = NewPuzzleForm(request.POST, request.FILES, instance=puzzle)
 
-        if form.is_valid():
-            puzzle = form.save(commit=False)
-            puzzle.save()
-#if edit puzzle, it will revert to available, I think
-        return redirect('puzzle_list')
-        #else: # create a the populated form again????
-       #     form = NewPuzzleForm(request.POST, request.FILES, instance=puzzle)
+#         if form.is_valid():
+#             puzzle = form.save(commit=False)
+#             puzzle.save()
+# #if edit puzzle, it will revert to available, I think
+#         return redirect('puzzle_list')
+#         #else: # create a the populated form again????
+#        #     form = NewPuzzleForm(request.POST, request.FILES, instance=puzzle)
 
 

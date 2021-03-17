@@ -26,15 +26,6 @@
     {% endif %}
 </div>
 
-<form method="POST" action="{% url 'edit_puzzle_details' puzzle.pk %}">
-    <div>
-      {% csrf_token %}
-      {{ form.as_p }}
-    </div>
-    
-    <button type=submit class = 'edit'>Edit Puzzle</button> 
-
-
 <form action="{% url 'delete_puzzle' puzzle.pk %}" method="POST">
     {% csrf_token %}
     <button type=submit class='delete'>Delete puzzle</button>

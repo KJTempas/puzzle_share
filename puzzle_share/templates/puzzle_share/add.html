@@ -3,9 +3,6 @@
 
 <h3> Add New Puzzle</h3>
 
-{% for message in messages %}
-    <li>{{ message }}</li>
-{% endfor %}
 
 
 <form method="POST" action="{% url 'add_puzzle' %}" enctype="multipart/form-data">

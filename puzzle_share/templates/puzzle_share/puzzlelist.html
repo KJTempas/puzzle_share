@@ -6,7 +6,14 @@
 <a class = "nav-link" href="{% url 'puzzles_checked_out' %}"> Puzzles Currently Checked Out</a>
 <a class = "nav-link" href="{% url 'add_puzzle' %}">Add a Puzzle</a>
 <hr>
-
+<!-- Messages -->
+{% if message %}
+<div class="messages">
+    {% for message in messages %}
+        {{ message }}
+    {% endfor %}
+</div>
+{% endif %}
 
 <h4>Search</h4>
 <form method="GET" action="{% url 'puzzle_list' %}">
@@ -37,7 +44,7 @@
 
 
 
-<script src="{% static 'js/confirm_delete.js' %}"></script>
+
 
 {% empty %}
 

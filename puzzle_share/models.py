@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import User
+#from django.contrib.auth.models import User
 from django.core.files.storage import default_storage
 
 # Create your models here.
@@ -16,8 +16,8 @@ class Puzzle(models.Model):
     STATUS=(
         (1, ('Available to borrow')),
         (2, ('Borrowed by someone')),
-    )
-    #user = models.ForeignKey('auth.User', null=False, on_delete=models.PROTECT)
+    )                                                   #TODO research -maybe should be models.CASCADE?
+  #user = models.ForeignKey('auth.User', null=False, on_delete=models.PROTECT)
     name = models.CharField(max_length=30)
     pieces = models.PositiveSmallIntegerField(choices=PIECES, default= 500,)
     company = models.CharField(max_length=20)#, help_text = 'Enter name of puzzle manufacturer')
@@ -28,28 +28,27 @@ class Puzzle(models.Model):
     user_last_name = models.CharField(max_length=20, default = "")
     photo = models.ImageField(upload_to='user_images/', blank=True, null=True)
     
-    #may need to override save method if photo replaced; 
+    #may need to override save method and delete if photo replaced; 
     #see wishlist/models
     
     class Meta:
         #to avoid duplicate puzzles being aded, and puzzles, name, pieces, and company together are a unique entity
         unique_together = [['name', 'pieces', 'company']]
 
-
     def delete(self, *args, **kwargs):
         if self.photo:
             self.delete_photo(self.photo) #call method below
             #call through to Django super fx to do the actual delete
-            super().delete(*args, **kwargs)
-        else:
-            super().delete(*args, **kwargs)  
+        super().delete(*args, **kwargs)
+        # else:
+        #     super().delete(*args, **kwargs)  
             
-
-
     def delete_photo(self,photo):
         if default_storage.exists(photo.name):
             default_storage.delete(photo.name)
 
+
+    
 
     def __str__(self):
         photo_str = self.photo.url if self.photo else 'no photo'
