@@ -5,6 +5,7 @@
 <a class = "nav-link" href="{% url 'puzzles_available' %}">Puzzles Available</a>
 <a class = "nav-link" href="{% url 'puzzles_checked_out' %}"> Puzzles Currently Checked Out</a>
 <a class = "nav-link" href="{% url 'add_puzzle' %}">Add a Puzzle</a>
+<a class = "nav-link" href="{% url 'puzzle_list' %}">All Puzzles</a>
 <hr>
 <!-- Messages -->
 {% if message %}
@@ -20,7 +21,10 @@
     {{ search_form }}
     <button type="submit">Search</button>
 </form>
-
+    <a href="{% url 'puzzle_list' %}">
+        <button>Clear Search</button> <!--when clicked, go to link above-->
+    </a>
+    
 
 <h3> All Puzzles - Available and Checked Out</h3>
 
